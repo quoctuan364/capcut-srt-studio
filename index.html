@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CapCut Auto-SRT &amp; Viral Hook Studio — @quoctuan364</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Top Header -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-badge">SRT</div>
+        <div>
+          <h1>CapCut Auto-SRT &amp; Viral Hook Studio</h1>
+          <span class="subtitle">Công cụ ngắt nhịp phụ đề chuẩn TikTok/Reels, đo tốc độ thoại &amp; xuất file .SRT kéo thẳng vào CapCut</span>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <button id="btnLoadSample" class="btn-ghost">Nạp kịch bản mẫu</button>
+        <button id="btnOpenTeleprompter" class="btn-outline">Mở Máy Nhắc Chữ (Teleprompter)</button>
+        <button id="btnDownloadSrt" class="btn-primary">Tải File Phụ Đề (.SRT)</button>
+      </div>
+    </header>
+
+    <!-- Main 3-Column Studio Grid -->
+    <main class="studio-grid">
+      <!-- COLUMN 1: SCRIPT INPUT & PACING CONTROLS -->
+      <section class="panel input-panel">
+        <div class="panel-head">
+          <span class="panel-tag">01 // KỊCH BẢN THOẠI ĐẦU VÀO</span>
+          <span class="mono-stat" id="inputWordStat">0 từ · 00:00</span>
+        </div>
+
+        <!-- Pacing Configuration Controls -->
+        <div class="controls-bar">
+          <div class="ctrl-item">
+            <label for="selWpm">Tốc độ đọc (WPM)</label>
+            <select id="selWpm">
+              <option value="145">Chậm &amp; Truyền cảm (145 từ/phút)</option>
+              <option value="175" selected>Chuẩn TikTok / Reels (175 từ/phút)</option>
+              <option value="205">Tốc độ cao / Review nhanh (205 từ/phút)</option>
+            </select>
+          </div>
+
+          <div class="ctrl-item">
+            <label for="selMaxWords">Số từ tối đa / dòng phụ đề</label>
+            <select id="selMaxWords">
+              <option value="4">Siêu ngắn — 4 từ (Hormozi Style)</option>
+              <option value="6" selected>Tiêu chuẩn — 6 từ (TikTok/Shorts)</option>
+              <option value="9">Dài hơn — 9 từ (YouTube Ngang)</option>
+            </select>
+          </div>
+
+          <div class="ctrl-item">
+            <label for="selCase">Kiểu chữ phụ đề</label>
+            <select id="selCase">
+              <option value="normal" selected>Giữ nguyên định dạng</option>
+              <option value="upper">IN HOA TOÀN BỘ (BOLD CAPCUT)</option>
+              <option value="no-punct">Bỏ dấu chấm phẩy cuối dòng</option>
+            </select>
+          </div>
+        </div>
+
+        <textarea id="scriptInput" class="script-textarea" placeholder="Dán kịch bản lời thoại của bạn vào đây...&#10;&#10;Hệ thống sẽ tự động:&#10;- Ngắt câu đúng nhịp thở (4–6 từ/dòng chuẩn CapCut)&#10;- Tính chính xác mốc thời gian bắt đầu &amp; kết thúc (00:00:00,000)&#10;- Chấm điểm sức hút 3 giây đầu (Hook Analyzer)&#10;- Xuất file .SRT để kéo thẳng vào Timeline CapCut PC / Mobile"></textarea>
+
+        <!-- Viral 3-Second Hook Analyzer Box -->
+        <div class="hook-analyzer" id="hookAnalyzerBox">
+          <div class="hook-head">
+            <span class="hook-title">PHÂN TÍCH CÂU MỞ ĐẦU 3 GIÂY (HOOK ANALYZER)</span>
+            <span class="hook-score-pill" id="hookScoreBadge">--/100</span>
+          </div>
+          <div class="hook-preview-line" id="hookFirstLine">Nhập kịch bản để phân tích câu mở đầu 3 giây...</div>
+          <div class="hook-feedback" id="hookFeedbackList"></div>
+        </div>
+      </section>
+
+      <!-- COLUMN 2: LIVE GENERATED TIMELINE & SRT BLOCKS -->
+      <section class="panel timeline-panel">
+        <div class="panel-head">
+          <span class="panel-tag mint">02 // TIMELINE PHỤ ĐỀ TỰ ĐỘNG (.SRT)</span>
+          <div class="head-actions">
+            <button id="btnCopySrt" class="btn-mini">Copy SRT</button>
+            <button id="btnDownloadVtt" class="btn-mini">Tải .VTT</button>
+            <button id="btnDownloadTxt" class="btn-mini">Tải .TXT</button>
+          </div>
+        </div>
+
+        <div class="metrics-strip">
+          <div class="metric-chip">
+            <span class="m-label">TỔNG DÒNG</span>
+            <span class="m-val" id="statCueCount">0</span>
+          </div>
+          <div class="metric-chip">
+            <span class="m-label">THỜI LƯỢNG VIDEO</span>
+            <span class="m-val mint" id="statTotalDur">00:00</span>
+          </div>
+          <div class="metric-chip">
+            <span class="m-label">NHỊP CẮT TB</span>
+            <span class="m-val gold" id="statAvgCue">0.0s</span>
+          </div>
+        </div>
+
+        <div id="srtBlocksList" class="srt-blocks-list"></div>
+      </section>
+
+      <!-- COLUMN 3: TIKTOK / REELS 9:16 LIVE CAPTION PREVIEW -->
+      <section class="panel preview-panel">
+        <div class="panel-head">
+          <span class="panel-tag pink">03 // MÔ PHỎNG CAPCUT 9:16</span>
+          <select id="selCaptionStyle" class="style-select">
+            <option value="aura">Aura Neon Glow</option>
+            <option value="hormozi">Hormozi Bold Yellow</option>
+            <option value="minimal">Clean Minimal White</option>
+          </select>
+        </div>
+
+        <div class="phone-stage">
+          <div class="phone-frame">
+            <div class="phone-notch"></div>
+            <div class="phone-screen">
+              <div class="safe-zone-guide">SAFE ZONE 9:16</div>
+              <div class="phone-timecode" id="previewTimecode">00:00.0 / 00:00.0</div>
+
+              <div class="caption-overlay style-aura" id="liveCaptionText">
+                Bấm ▶ Chạy Thử để xem phụ đề chạy đúng nhịp trên màn hình điện thoại!
+              </div>
+
+              <!-- Simulated TikTok Right Sidebar Icons -->
+              <div class="tt-ui-dots">
+                <div class="tt-dot"></div>
+                <div class="tt-dot"></div>
+                <div class="tt-dot"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="player-controls">
+          <button id="btnPlayPreview" class="btn-primary" style="width:100%;">▶ Chạy Thử Nhịp Phụ Đề + Giọng Đọc</button>
+          <label class="voice-toggle">
+            <input type="checkbox" id="chkEnableVoice" checked />
+            <span>Bật giọng đọc thử tiếng Việt (Web Speech API)</span>
+          </label>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Full-Screen Teleprompter Modal -->
+  <div id="teleprompterModal" class="tele-modal hidden">
+    <div class="tele-topbar">
+      <div class="tele-title">MÁY NHẮC CHỮ GHI HÌNH (TELEPROMPTER)</div>
+      <div class="tele-controls">
+        <label>Tốc độ cuộn: <input type="range" id="teleSpeed" min="1" max="8" value="3" /></label>
+        <label>Cỡ chữ: <input type="range" id="teleFontSize" min="28" max="72" value="46" /></label>
+        <button id="btnTeleToggle" class="btn-primary">▶ Bắt đầu cuộn</button>
+        <button id="btnTeleMirror" class="btn-outline">Lật gương</button>
+        <button id="btnCloseTele" class="btn-ghost">Đóng [ESC]</button>
+      </div>
+    </div>
+    <div class="tele-guide-line"></div>
+    <div id="teleScrollArea" class="tele-scroll-area">
+      <div id="teleTextContent" class="tele-text-content"></div>
+    </div>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
