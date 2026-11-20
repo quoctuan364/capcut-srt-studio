@@ -3,91 +3,132 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CapCut Auto-SRT &amp; Viral Hook Studio — @quoctuan364</title>
+  <title>CapCut Auto-SRT Studio v2.0 — @quoctuan364</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
   <div class="app-shell">
-    <!-- Top Header -->
+    <!-- Top Studio Bar -->
     <header class="topbar">
       <div class="brand">
-        <div class="brand-badge">SRT</div>
-        <div>
-          <h1>CapCut Auto-SRT &amp; Viral Hook Studio</h1>
-          <span class="subtitle">Công cụ ngắt nhịp phụ đề chuẩn TikTok/Reels, đo tốc độ thoại &amp; xuất file .SRT kéo thẳng vào CapCut</span>
+        <div class="brand-badge" aria-hidden="true">SRT 2.0</div>
+        <div class="brand-copy">
+          <h1>CapCut Auto-SRT Studio</h1>
+          <span class="subtitle">Phân tách kịch bản, đồng bộ Video/Audio 9:16, chỉnh sửa mốc thời gian &amp; xuất .SRT</span>
         </div>
       </div>
 
       <div class="topbar-actions">
-        <button id="btnLoadSample" class="btn-ghost">Nạp kịch bản mẫu</button>
-        <button id="btnOpenTeleprompter" class="btn-outline">Mở Máy Nhắc Chữ (Teleprompter)</button>
-        <button id="btnDownloadSrt" class="btn-primary">Tải File Phụ Đề (.SRT)</button>
+        <div class="template-picker">
+          <label for="selTemplate" class="sr-only">Mẫu kịch bản</label>
+          <select id="selTemplate" title="Chọn kịch bản mẫu theo chủ đề">
+            <option value="">Mẫu kịch bản...</option>
+            <option value="tech">Tech / Dev Tips</option>
+            <option value="review">Review &amp; Bán Hàng</option>
+            <option value="story">Kể Chuyện / Viral Hook</option>
+          </select>
+        </div>
+
+        <input type="file" id="fileSrtInput" accept=".srt,.vtt,text/plain" hidden />
+        <button id="btnImportSrt" class="btn-outline" type="button" title="Nhập file phụ đề .SRT hoặc .VTT có sẵn để chỉnh sửa">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <span>Import .SRT</span>
+        </button>
+
+        <input type="file" id="fileMediaInput" accept="video/*,audio/*" hidden />
+        <button id="btnImportMedia" class="btn-outline" type="button" title="Nạp Video hoặc Audio thật để khớp phụ đề 9:16">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+          <span>Tải Video/Audio</span>
+        </button>
+
+        <button id="btnOpenTeleprompter" class="btn-ghost" type="button">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          <span>Teleprompter</span>
+        </button>
+
+        <button id="btnDownloadSrt" class="btn-primary" type="button">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span>Xuất .SRT</span>
+        </button>
       </div>
     </header>
 
-    <!-- Main 3-Column Studio Grid -->
+    <!-- Main 3-Column Cinema NLE Workspace -->
     <main class="studio-grid">
-      <!-- COLUMN 1: SCRIPT INPUT & PACING CONTROLS -->
-      <section class="panel input-panel">
+      <!-- PANE 1: SCRIPT & HOOK ANALYZER -->
+      <section class="panel input-panel" aria-label="Kịch bản và phân tích Hook">
         <div class="panel-head">
-          <span class="panel-tag">01 // KỊCH BẢN THOẠI ĐẦU VÀO</span>
-          <span class="mono-stat" id="inputWordStat">0 từ · 00:00</span>
+          <div class="panel-head-left">
+            <span class="panel-tag">01 // KỊCH BẢN ĐẦU VÀO</span>
+            <span class="status-chip" id="draftSavedChip">Đã lưu nháp</span>
+          </div>
+          <div class="panel-head-right">
+            <span class="mono-stat" id="inputWordStat">0 từ · 00:00</span>
+            <button id="btnResetDraft" class="btn-mini" type="button" title="Khôi phục kịch bản mặc định">Đặt lại</button>
+          </div>
         </div>
 
-        <!-- Pacing Configuration Controls -->
         <div class="controls-bar">
           <div class="ctrl-item">
-            <label for="selWpm">Tốc độ đọc (WPM)</label>
+            <label for="selWpm">Tốc độ nói (WPM)</label>
             <select id="selWpm">
-              <option value="145">Chậm &amp; Truyền cảm (145 từ/phút)</option>
-              <option value="175" selected>Chuẩn TikTok / Reels (175 từ/phút)</option>
-              <option value="205">Tốc độ cao / Review nhanh (205 từ/phút)</option>
+              <option value="130">Chậm · Kể chuyện (130)</option>
+              <option value="155">Vừa · Giải thích (155)</option>
+              <option value="175" selected>Chuẩn TikTok (175)</option>
+              <option value="205">Nhanh · Review (205)</option>
+              <option value="230">Siêu nhanh (230)</option>
             </select>
           </div>
 
           <div class="ctrl-item">
-            <label for="selMaxWords">Số từ tối đa / dòng phụ đề</label>
+            <label for="selMaxWords">Từ tối đa / dòng</label>
             <select id="selMaxWords">
-              <option value="4">Siêu ngắn — 4 từ (Hormozi Style)</option>
-              <option value="6" selected>Tiêu chuẩn — 6 từ (TikTok/Shorts)</option>
-              <option value="9">Dài hơn — 9 từ (YouTube Ngang)</option>
+              <option value="4">4 từ (Hormozi)</option>
+              <option value="6" selected>6 từ (Chuẩn 9:16)</option>
+              <option value="9">9 từ (YouTube 16:9)</option>
             </select>
           </div>
 
           <div class="ctrl-item">
-            <label for="selCase">Kiểu chữ phụ đề</label>
+            <label for="selCase">Kiểu chữ</label>
             <select id="selCase">
-              <option value="normal" selected>Giữ nguyên định dạng</option>
-              <option value="upper">IN HOA TOÀN BỘ (BOLD CAPCUT)</option>
-              <option value="no-punct">Bỏ dấu chấm phẩy cuối dòng</option>
+              <option value="normal" selected>Giữ nguyên</option>
+              <option value="upper">IN HOA TOÀN BỘ</option>
+              <option value="no-punct">Bỏ dấu cuối dòng</option>
             </select>
           </div>
         </div>
 
-        <textarea id="scriptInput" class="script-textarea" placeholder="Dán kịch bản lời thoại của bạn vào đây...&#10;&#10;Hệ thống sẽ tự động:&#10;- Ngắt câu đúng nhịp thở (4–6 từ/dòng chuẩn CapCut)&#10;- Tính chính xác mốc thời gian bắt đầu &amp; kết thúc (00:00:00,000)&#10;- Chấm điểm sức hút 3 giây đầu (Hook Analyzer)&#10;- Xuất file .SRT để kéo thẳng vào Timeline CapCut PC / Mobile"></textarea>
+        <textarea id="scriptInput" class="script-textarea" placeholder="Dán kịch bản lời thoại của bạn vào đây...&#10;&#10;Hoặc bấm 'Import .SRT' trên thanh công cụ để chỉnh sửa file phụ đề có sẵn."></textarea>
 
-        <!-- Viral 3-Second Hook Analyzer Box -->
+        <!-- Viral 3-Second Hook Analyzer -->
         <div class="hook-analyzer" id="hookAnalyzerBox">
           <div class="hook-head">
-            <span class="hook-title">PHÂN TÍCH CÂU MỞ ĐẦU 3 GIÂY (HOOK ANALYZER)</span>
+            <span class="hook-title">PHÂN TÍCH HOOK 3 GIÂY ĐẦU</span>
             <span class="hook-score-pill" id="hookScoreBadge">--/100</span>
+          </div>
+          <div class="hook-meter" aria-hidden="true">
+            <div class="hook-meter-fill" id="hookScoreBar"></div>
           </div>
           <div class="hook-preview-line" id="hookFirstLine">Nhập kịch bản để phân tích câu mở đầu 3 giây...</div>
           <div class="hook-feedback" id="hookFeedbackList"></div>
         </div>
       </section>
 
-      <!-- COLUMN 2: LIVE GENERATED TIMELINE & SRT BLOCKS -->
-      <section class="panel timeline-panel">
+      <!-- PANE 2: PRO SUBTITLE TIMELINE EDITOR -->
+      <section class="panel timeline-panel" aria-label="Timeline phụ đề SRT">
         <div class="panel-head">
-          <span class="panel-tag mint">02 // TIMELINE PHỤ ĐỀ TỰ ĐỘNG (.SRT)</span>
+          <div class="panel-head-left">
+            <span class="panel-tag emerald">02 // TIMELINE PHỤ ĐỀ</span>
+            <span class="mode-badge" id="modeBadge">Tự động</span>
+          </div>
           <div class="head-actions">
-            <button id="btnCopySrt" class="btn-mini">Copy SRT</button>
-            <button id="btnDownloadVtt" class="btn-mini">Tải .VTT</button>
-            <button id="btnDownloadTxt" class="btn-mini">Tải .TXT</button>
+            <button id="btnCopySrt" class="btn-mini" type="button">Copy SRT</button>
+            <button id="btnDownloadVtt" class="btn-mini" type="button">.VTT</button>
+            <button id="btnDownloadTxt" class="btn-mini" type="button">.TXT</button>
           </div>
         </div>
 
@@ -97,52 +138,109 @@
             <span class="m-val" id="statCueCount">0</span>
           </div>
           <div class="metric-chip">
-            <span class="m-label">THỜI LƯỢNG VIDEO</span>
-            <span class="m-val mint" id="statTotalDur">00:00</span>
+            <span class="m-label">THỜI LƯỢNG</span>
+            <span class="m-val emerald" id="statTotalDur">00:00</span>
           </div>
           <div class="metric-chip">
-            <span class="m-label">NHỊP CẮT TB</span>
-            <span class="m-val gold" id="statAvgCue">0.0s</span>
+            <span class="m-label">NHỊP TB</span>
+            <span class="m-val" id="statAvgCue">0.0s</span>
+          </div>
+          <div class="metric-chip">
+            <span class="m-label">TỐC ĐỘ ĐỌC</span>
+            <span class="m-val amber" id="statAvgCps">0 CPS</span>
+          </div>
+        </div>
+
+        <!-- Global Time-Shift & Batch Toolbar -->
+        <div class="timeline-toolbar">
+          <div class="shift-group" role="group" aria-label="Dịch toàn bộ mốc thời gian">
+            <span class="tb-label">Dịch giờ:</span>
+            <button class="btn-mini shift-btn" data-shift="-0.5" type="button">-0.5s</button>
+            <button class="btn-mini shift-btn" data-shift="-0.1" type="button">-0.1s</button>
+            <button class="btn-mini shift-btn" data-shift="0.1" type="button">+0.1s</button>
+            <button class="btn-mini shift-btn" data-shift="0.5" type="button">+0.5s</button>
+          </div>
+          <div class="batch-group">
+            <button id="btnAddCue" class="btn-mini" type="button">+ Thêm dòng</button>
+            <button id="btnRegenerateCues" class="btn-mini" type="button" title="Tạo lại toàn bộ timeline từ kịch bản bên trái">Tạo lại từ kịch bản</button>
           </div>
         </div>
 
         <div id="srtBlocksList" class="srt-blocks-list"></div>
       </section>
 
-      <!-- COLUMN 3: TIKTOK / REELS 9:16 LIVE CAPTION PREVIEW -->
-      <section class="panel preview-panel">
+      <!-- PANE 3: 9:16 LIVE VIDEO & CAPTION STAGE -->
+      <section class="panel preview-panel" aria-label="Mô phỏng màn hình 9:16">
         <div class="panel-head">
-          <span class="panel-tag pink">03 // MÔ PHỎNG CAPCUT 9:16</span>
-          <select id="selCaptionStyle" class="style-select">
-            <option value="aura">Aura Neon Glow</option>
-            <option value="hormozi">Hormozi Bold Yellow</option>
-            <option value="minimal">Clean Minimal White</option>
+          <span class="panel-tag amber">03 // SÂN KHẤU 9:16</span>
+          <select id="selCaptionStyle" class="style-select" aria-label="Kiểu hiển thị phụ đề">
+            <option value="cinema">Cinema Clean</option>
+            <option value="hormozi">Hormozi Bold</option>
+            <option value="emerald">Emerald Studio</option>
+            <option value="contrast">Contrast Box</option>
           </select>
         </div>
 
-        <div class="phone-stage">
-          <div class="phone-frame">
-            <div class="phone-notch"></div>
-            <div class="phone-screen">
-              <div class="safe-zone-guide">SAFE ZONE 9:16</div>
-              <div class="phone-timecode" id="previewTimecode">00:00.0 / 00:00.0</div>
+        <div class="stage-options-bar">
+          <label class="opt-inline">
+            <span>Vị trí:</span>
+            <select id="selCaptionPos">
+              <option value="bottom" selected>Dưới</option>
+              <option value="middle">Giữa</option>
+              <option value="top">Trên</option>
+            </select>
+          </label>
+          <button id="btnToggleSafeZone" class="btn-mini active" type="button">Safe Zone</button>
+          <button id="btnClearMedia" class="btn-mini danger hidden" type="button">Gỡ Media</button>
+        </div>
 
-              <div class="caption-overlay style-aura" id="liveCaptionText">
-                Bấm ▶ Chạy Thử để xem phụ đề chạy đúng nhịp trên màn hình điện thoại!
+        <div class="phone-stage">
+          <div class="phone-frame" id="mediaDropZone">
+            <div class="phone-notch" aria-hidden="true"></div>
+            <div class="phone-screen">
+              <video id="stageVideo" class="stage-video hidden" playsinline></video>
+              <audio id="stageAudio" class="hidden"></audio>
+
+              <div id="mediaPlaceholder" class="media-placeholder">
+                <svg class="placeholder-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                  <rect x="2" y="3" width="20" height="18" rx="3"/>
+                  <polygon points="10 9 16 12 10 15 10 9"/>
+                </svg>
+                <span id="mediaStatusLabel">Kéo thả Video/Audio 9:16 vào đây<br/>hoặc chạy thử nhịp tự động</span>
               </div>
 
-              <!-- Simulated TikTok Right Sidebar Icons -->
-              <div class="tt-ui-dots">
-                <div class="tt-dot"></div>
-                <div class="tt-dot"></div>
-                <div class="tt-dot"></div>
+              <div id="audioWaveBar" class="audio-wave-bar hidden" aria-hidden="true">
+                <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+              </div>
+
+              <div id="safeZoneOverlay" class="safe-zone-guide">SAFE ZONE 9:16</div>
+              <div class="phone-timecode" id="previewTimecode">00:00.0 / 00:00.0</div>
+
+              <div class="caption-overlay style-cinema pos-bottom" id="liveCaptionText">
+                Bấm Phát để kiểm tra nhịp phụ đề
               </div>
             </div>
           </div>
         </div>
 
         <div class="player-controls">
-          <button id="btnPlayPreview" class="btn-primary" style="width:100%;">▶ Chạy Thử Nhịp Phụ Đề + Giọng Đọc</button>
+          <div class="scrub-row">
+            <input type="range" id="scrubRange" min="0" max="1000" value="0" aria-label="Thanh tua thời gian" />
+            <div class="scrub-times">
+              <span id="scrubCurrent">00:00.0</span>
+              <span id="scrubTotal">00:00.0</span>
+            </div>
+          </div>
+
+          <div class="transport-row">
+            <button id="btnPlayPreview" class="btn-primary transport-play" type="button">Phát xem thử</button>
+            <select id="selPlaybackRate" class="speed-select" aria-label="Tốc độ phát">
+              <option value="0.75">0.75x</option>
+              <option value="1" selected>1.0x</option>
+              <option value="1.25">1.25x</option>
+            </select>
+          </div>
+
           <label class="voice-toggle">
             <input type="checkbox" id="chkEnableVoice" checked />
             <span>Bật giọng đọc thử tiếng Việt (Web Speech API)</span>
@@ -153,15 +251,15 @@
   </div>
 
   <!-- Full-Screen Teleprompter Modal -->
-  <div id="teleprompterModal" class="tele-modal hidden">
+  <div id="teleprompterModal" class="tele-modal hidden" role="dialog" aria-modal="true" aria-label="Máy nhắc chữ Teleprompter">
     <div class="tele-topbar">
-      <div class="tele-title">MÁY NHẮC CHỮ GHI HÌNH (TELEPROMPTER)</div>
+      <div class="tele-title">MÁY NHẮC CHỮ GHI HÌNH (TELEPROMPTER) · <span id="teleProgress">0%</span></div>
       <div class="tele-controls">
-        <label>Tốc độ cuộn: <input type="range" id="teleSpeed" min="1" max="8" value="3" /></label>
+        <label>Tốc độ: <input type="range" id="teleSpeed" min="1" max="8" value="3" /></label>
         <label>Cỡ chữ: <input type="range" id="teleFontSize" min="28" max="72" value="46" /></label>
-        <button id="btnTeleToggle" class="btn-primary">▶ Bắt đầu cuộn</button>
-        <button id="btnTeleMirror" class="btn-outline">Lật gương</button>
-        <button id="btnCloseTele" class="btn-ghost">Đóng [ESC]</button>
+        <button id="btnTeleToggle" class="btn-primary" type="button">Bắt đầu cuộn</button>
+        <button id="btnTeleMirror" class="btn-outline" type="button">Lật gương</button>
+        <button id="btnCloseTele" class="btn-ghost" type="button">Đóng [ESC]</button>
       </div>
     </div>
     <div class="tele-guide-line"></div>
@@ -169,6 +267,8 @@
       <div id="teleTextContent" class="tele-text-content"></div>
     </div>
   </div>
+
+  <div id="toastRoot" class="toast-root" aria-live="polite"></div>
 
   <script src="./app.js"></script>
 </body>

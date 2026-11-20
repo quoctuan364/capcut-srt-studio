@@ -1,13 +1,13 @@
 <div align="center">
 
-# CapCut Auto-SRT & Viral Hook Studio
+# CapCut Auto-SRT Studio v2.0
 
-**Công cụ tự động ngắt nhịp phụ đề chuẩn TikTok / Reels / Shorts, phân tích câu mở đầu 3 giây (Hook Analyzer), mô phỏng màn hình 9:16 và xuất file `.SRT` kéo thả trực tiếp vào CapCut.**
+**Công cụ biên tập phụ đề tiếng Việt chạy 100% trên trình duyệt: tự động ngắt nhịp chuẩn TikTok/Reels, Import & chỉnh mốc `.SRT / .VTT`, nạp Video/Audio thật vào khung 9:16 và xuất file kéo thẳng vào CapCut.**
 
-[![Live Demo](https://img.shields.io/badge/LIVE_DEMO-OPEN_STUDIO_NOW-61FFCA?style=for-the-badge&labelColor=0D0B18)](https://quoctuan364.github.io/capcut-srt-studio/)
-[![Zero Dependencies](https://img.shields.io/badge/ARCHITECTURE-100%25_CLIENT_SIDE-A277FF?style=for-the-badge&labelColor=0D0B18)](#)
-[![CapCut Ready](https://img.shields.io/badge/EXPORT-.SRT_%7C_.VTT_%7C_.TXT-F694FF?style=for-the-badge&labelColor=0D0B18)](#)
-[![License: MIT](https://img.shields.io/badge/LICENSE-MIT-FFCA85?style=for-the-badge&labelColor=0D0B18)](#)
+[![Live Demo](https://img.shields.io/badge/LIVE_DEMO-OPEN_STUDIO_NOW-10B981?style=for-the-badge&labelColor=090C12)](https://quoctuan364.github.io/capcut-srt-studio/)
+[![Zero Dependencies](https://img.shields.io/badge/ARCHITECTURE-100%25_CLIENT_SIDE-0F172A?style=for-the-badge&labelColor=10B981)](https://github.com/quoctuan364/capcut-srt-studio)
+[![CapCut Ready](https://img.shields.io/badge/EXPORT-.SRT_%7C_.VTT_%7C_.TXT-090C12?style=for-the-badge&labelColor=1F2A3E)](#)
+[![License: MIT](https://img.shields.io/badge/LICENSE-MIT-090C12?style=for-the-badge&labelColor=1F2A3E)](#)
 
 *Phát triển bởi [Quốc Tuấn (@quoctuan364)](https://github.com/quoctuan364)*
 
@@ -17,36 +17,33 @@
 
 ## Live Demo Trực Tuyến
 
-Mở và sử dụng trực tiếp ngay trên trình duyệt (không cần cài đặt):
-👉 **https://quoctuan364.github.io/capcut-srt-studio/**
+Mở và sử dụng ngay trên trình duyệt (không cần cài đặt, không upload dữ liệu ra ngoài):
+- **https://quoctuan364.github.io/capcut-srt-studio/**
+
+![CapCut Auto-SRT Studio v2.0 — 3-Column Cinema NLE Workspace](./preview-v2.png)
 
 ---
 
-## Tính năng Chính (Core Features)
+## Tính Năng Mới ở Phiên Bản v2.0
 
-1. **Thuật toán Ngắt Nhịp Phụ Đề Thông Minh cho Tiếng Việt:**
-   - Tự động tách kịch bản theo nhịp ngắt câu tự nhiên (dấu chấm, dấu phẩy, xuống dòng) và giới hạn đúng **4 từ (Hormozi Style)**, **6 từ (TikTok/Reels chuẩn)** hoặc **9 từ (YouTube ngang)** mỗi dòng, tránh tình trạng lẻ 1 từ mồ côi cuối câu.
-   - Tùy chỉnh tốc độ đọc thoại (**145 / 175 / 205 WPM**) để tự động tính toán chính xác mốc thời gian `00:00:00,000 --> 00:00:01,850`.
-2. **Phân Tích & Chấm Điểm Câu Mở Đầu 3 Giây (Viral Hook Analyzer):**
-   - Quét ngay câu đầu tiên của kịch bản, chấm điểm trên thang `100`, phát hiện các yếu tố giữ chân (Cảnh báo/Phủ định, Con số cụ thể, Curiosity Gap) và cảnh báo nếu câu mở đầu quá dài hoặc chào hỏi rườm rà.
-3. **Mô Phỏng Màn Hình Điện Thoại 9:16 & Giọng Đọc Thử (TTS):**
-   - Xem trước trực tiếp phụ đề chạy theo đúng mốc giây trên khung điện thoại 9:16 với 3 phong cách chữ (`Aura Neon Glow`, `Hormozi Bold Yellow`, `Clean Minimal White`), kết hợp giọng đọc thử tiếng Việt qua Web Speech API.
-4. **Máy Nhắc Chữ Toàn Màn Hình (Built-in Teleprompter):**
-   - Chế độ máy nhắc chữ khi quay video bằng điện thoại/webcam: tùy chỉnh tốc độ cuộn, cỡ chữ (`28px–72px`) và chế độ **Lật gương (Mirror Mode)** cho kính phản xạ.
-5. **Xuất File Trực Tiếp Cho CapCut PC / Premiere / DaVinci:**
-   - Hỗ trợ tải ngay **`.SRT`**, **`.VTT`**, **`.TXT`** hoặc Copy 1-click. Trên CapCut PC, chỉ cần vào **Text → Local Captions → Import** và chọn file `.srt` vừa tải là toàn bộ phụ đề khớp nhịp sẽ tự động lên Timeline.
-
----
-
-## Cách Kéo File `.SRT` Vào CapCut PC
-
-1. Dán kịch bản của bạn vào cột **01 // Kịch Bản Thoại Đầu Vào**.
-2. Chỉnh lại nội dung từng dòng trực tiếp trên cột **02 // Timeline Phụ Đề** nếu muốn.
-3. Bấm **Tải File Phụ Đề (.SRT)** ở góc trên bên phải.
-4. Mở **CapCut PC** → chọn tab **Text (Văn bản)** → **Local Captions (Phụ đề cục bộ)** → **Import** file `capcut-subtitles.srt` và kéo xuống Timeline.
+1. **Nạp Video / Audio Thật vào Khung 9:16 (Drag & Drop Media):**
+   - Kéo thả trực tiếp video quay dọc hoặc file thu âm vào màn hình mô phỏng để căn chữ ngay trên video thật.
+   - Hỗ trợ thanh tua (Scrub Bar), tốc độ phát `0.75x / 1.0x / 1.25x`, phím tắt `Space`, Safe Zone 9:16 và chọn vị trí phụ đề (Dưới / Giữa / Trên).
+2. **Import & Biên Tập Timeline `.SRT / .VTT` Chuyên Sâu:**
+   - Nhập file `.SRT` hoặc `.VTT` có sẵn để sửa lỗi chính tả và đồng bộ lại thời gian.
+   - **Time-Shift toàn bộ timeline** (`-0.5s`, `-0.1s`, `+0.1s`, `+0.5s`), chỉnh trực tiếp giây bắt đầu/kết thúc từng dòng, **Tách đôi (`Split`)**, **Gộp dòng (`Merge`)**, và **cảnh báo tốc độ đọc (CPS > 20)** giúp phụ đề không bị trôi quá nhanh.
+3. **Thuật Toán Ngắt Nhịp Tiếng Việt & Viral Hook Analyzer:**
+   - Tự chia dòng theo nhịp ngắt câu (4 / 6 / 9 từ, chống lẻ 1 từ cuối dòng) theo tốc độ nói `130–230 WPM`.
+   - Chấm điểm câu mở đầu 3 giây kèm thanh tiến độ và gợi ý sửa Hook.
+4. **Tự Động Lưu Nháp (`localStorage`) & Teleprompter Toàn Màn Hình:**
+   - Không lo mất kịch bản khi tải lại trang; hỗ trợ 3 mẫu kịch bản nhanh (`Tech`, `Review`, `Story`) và máy nhắc chữ lật gương.
 
 ---
 
-## Giấy phép (License)
+## Cách Chạy Cục Bộ Trên Windows
 
-Phân phối dưới giấy phép **MIT License** — [@quoctuan364](https://github.com/quoctuan364).
+Nháy đúp file `start-capcut.bat` (hoặc mở trực tiếp `index.html` trên trình duyệt).
+
+## Giấy phép
+
+MIT License — [@quoctuan364](https://github.com/quoctuan364).
